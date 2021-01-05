@@ -1,2 +1,2 @@
 # thesaurus-rs
-A thesaurus library for Rust that uses https://www.powerthesaurus.org/.
+A thesaurus library for Rust.
