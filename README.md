@@ -1,7 +1,7 @@
 # thesaurus-rs
 A thesaurus library for Rust.
 
-`thesaurus-rs` is extremely simple library for simple programs that don't need an internet connection. It relies on the JSON file from (zaibacu)[https://github.com/zaibacu/thesaurus].
+`thesaurus-rs` is extremely simple library for simple programs that don't need an internet connection. It relies on the JSON file from [zaibacu](https://github.com/zaibacu/thesaurus).
 
 It's simple to use:
 ```
