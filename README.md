@@ -1,6 +1,12 @@
 # thesaurus-rs
 A thesaurus library for Rust.
 
+Add to `Cargo.toml`
+```
+thesaurus = "0.1.3"
+```
+
+
 `thesaurus-rs` is extremely simple library for simple programs that need a thesaurus, but don't need an internet connection. It relies on the JSON file from [zaibacu](https://github.com/zaibacu/thesaurus).
 
 It's simple to use:

@@ -1,11 +1,12 @@
 [package]
 name = "thesaurus"
-version = "0.1.2"
+version = "0.1.3"
 authors = ["Grant Handy <grantshandy@gmail.com>"]
 edition = "2018"
 license = "MIT"
 description = "An offline thesaurus library for Rust."
 repository = "https://github.com/DefunctLizard/thesaurus-rs"
+documentation = "docs.rs/thesaurus"
 keywords = ["thesaurus", "synonym", "synonyms"]
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
