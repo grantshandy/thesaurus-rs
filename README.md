@@ -32,7 +32,7 @@ Synonyms:
     goodness (Noun)
 ```
 
-## License
+## Licenses
 `thesaurus-rs` is written under the MIT license:
 ```
 MIT License
