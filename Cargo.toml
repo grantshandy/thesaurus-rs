@@ -1,7 +1,7 @@
 [package]
 name = "thesaurus"
-version = "0.1.0"
-authors = ["DefunctLizard <grantshandy@gmail.com>"]
+version = "0.1.2"
+authors = ["Grant Handy <grantshandy@gmail.com>"]
 edition = "2018"
 license = "MIT"
 description = "An offline thesaurus library for Rust."
@@ -11,5 +11,4 @@ keywords = ["thesaurus", "synonym", "synonyms"]
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-serde_json = "1.0.61"
-thiserror = "1.0.23"
+serde_json = "1.0.64"
