@@ -1,4 +1,8 @@
 # thesaurus-rs
+[![Crates.io](https://img.shields.io/crates/v/thesaurus.svg)](https://crates.io/crates/thesaurus)
+[![Crates.io](https://img.shields.io/crates/d/thesaurus)](https://crates.io/crates/thesaurus)
+[![API](https://docs.rs/thesaurus/badge.svg)](https://docs.rs/thesaurus)
+
 A thesaurus library for Rust.
 
 Add to `Cargo.toml`
