@@ -97,7 +97,7 @@ impl Thesaurus {
         };
 
         let dict_jsonl: String = include_str!("en_thesaurus.jsonl").to_string();
-    
+   
         let mut words: Vec<Word> = Vec::new();
     
         for json in dict_jsonl.lines() {
@@ -196,4 +196,114 @@ impl std::fmt::Display for Error {
             }
         }
     }
+}
+
+fn split_document(text: &str) -> Vec<Vec<String>> {
+    let mut a: Vec<String> = Vec::new();
+    let mut b: Vec<String> = Vec::new();
+    let mut c: Vec<String> = Vec::new();
+
+    let mut switcher: u32 = 0;
+
+    for x in text.lines() {
+        if switcher == 0 {
+            a.push(x.to_string());
+            switcher = switcher + 1;
+        } else if switcher == 1 {
+            b.push(x.to_string());
+            switcher = switcher + 1;
+        } else if switcher == 2 {
+            c.push(x.to_string());
+            switcher = 0;
+        };
+    };
+
+    println!("a: {}", a.len());
+    println!("b: {}", b.len());
+    println!("c: {}", c.len());
+
+    return vec!(a, b, c);
+}
+
+fn multithreaded_synonym<T: AsRef<str>>(word: T, word_type_request: Option<WordType>) -> std::result::Result<Thesaurus, Error> {
+    let is_word_type_request: bool = match word_type_request {
+        Some(_) => true,
+        None => false,
+    };
+
+    let dict_jsonl: String = include_str!("en_thesaurus.jsonl").to_string();
+    let thing = split_document(dict_jsonl.as_str());
+
+    let mut words: Vec<Word> = Vec::new();
+
+    
+    for json in dict_jsonl.lines() {
+        let parsed_json: Value = match serde_json::from_str(&json) {
+            Ok(parsed_json) => parsed_json,
+            Err(error) => {
+                return Err(Error::Json(format!("Couldn't parse json: {}", error)));
+            }
+        };
+
+        let json_word = match &parsed_json["word"] {
+            Value::String(json_word) => json_word,
+            _ => {
+                return Err(Error::Json("Unable to find word in parsed JSON".to_string()));
+            }
+        };
+
+        if json_word == word.as_ref() {
+            let json_synonyms = match &parsed_json["synonyms"] {
+                Value::Array(json_synonyms) => json_synonyms,
+                _ => return Err(Error::Json("Unable to find synonyms in parsed JSON".to_string())),
+            };
+
+            let json_word_type = match &parsed_json["pos"] {
+                Value::String(word_type) => word_type,
+                _ => return Err(Error::Json("Unable to find pos values in parsed JSON".to_string())),
+            };
+
+            for synonym_value in json_synonyms.iter() {
+                let synonym = match synonym_value {
+                    Value::String(synonym_value) => synonym_value,
+                    _ => return Err(Error::Json("Unable to find synonym values in parsed JSON".to_string())),
+                };
+
+                let word_type = match WordType::from(json_word_type.clone()) {
+                    Ok(word_type) => word_type,
+                    Err(error) => return Err(Error::UnexpectedType(error)),
+                };
+
+                let word_struct = Word {
+                    name: synonym.clone(),
+                    word_type: word_type,
+                };
+                
+                if is_word_type_request {
+                    if word_struct.clone().word_type == word_type_request.unwrap() {
+                        if !words.contains(&word_struct.clone()) {
+                            words.push(word_struct.clone());
+                        };
+                    } else {
+                        continue;
+                    };
+                };
+
+                if !words.contains(&word_struct.clone()) {
+                    words.push(word_struct.clone());
+                };
+            };
+        };
+    };
+
+    if words.len() == 0 {
+        return Err(Error::Unknown);
+    }
+
+    let word_res = Thesaurus {
+        name: word.as_ref().to_string(),
+        words,
+    };
+
+    return Ok(word_res);
 }
