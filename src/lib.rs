@@ -33,6 +33,7 @@
 //! ```
 
 use serde_json::Value;
+use futures::future::Future;
 
 /// The main struct for the Thesaurus
 pub struct Thesaurus {
@@ -111,13 +112,12 @@ impl Thesaurus {
         return Ok(thesaurus);
     }
 
-    pub fn multi_threaded_synonym<T: AsRef<str>>(word: T, word_type_request: Option<WordType>) -> Result<Thesaurus, Error> {
-    
+    pub fn faster_synonym<T: AsRef<str>>(word: T, word_type_request: Option<WordType>) {
+        // -> Result<Thesaurus, Error>
     }
 
-
     // parse a vec of lines and return a vec of synonyms.
-    fn parse<T: AsRef<str>>(dict_jsonl: Vec<String>, word: T, word_type_request: Option<WordType>) -> Result<Vec<Synonym>, Error> {
+    async fn parse<T: AsRef<str>>(dict_jsonl: Vec<String>, word: T, word_type_request: Option<WordType>) -> Future<Result<Vec<Synonym>, Error>> {
         let is_word_type_request: bool = match word_type_request {
             Some(_) => true,
             None => false,
