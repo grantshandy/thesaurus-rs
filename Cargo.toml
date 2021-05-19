@@ -13,3 +13,4 @@ keywords = ["thesaurus", "synonym", "synonyms"]
 
 [dependencies]
 serde_json = "1.0.64"
+futures = "0.3.15"
