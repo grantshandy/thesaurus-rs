@@ -12,7 +12,7 @@
 //!         Ok(data) => {
 //!             let mut synonyms = String::new();
 //!
-//!             for synonym in data.words.iter() {
+//!             for synonym in data.words {
 //!                 synonyms.push_str(&format!("\n    {} ({})", synonym.name, synonym.word_type));
 //!             };
 //!
@@ -93,12 +93,12 @@ impl std::fmt::Display for WordType {
 static COMPRESSED_DICTIONARY: &[u8] = include_bytes!(concat!(env!("OUT_DIR"), "/en_thesaurus.gz"));
 
 lazy_static! {
-  static ref DICTIONARY: &'static str = {
+  static ref DICTIONARY: String = {
       let mut dec = Decoder::new(COMPRESSED_DICTIONARY).expect("Failed to initialize runtime dictionary decoder");
       let mut output = Vec::new();
       dec.read_to_end(&mut output).expect("Failed to decompress dictionary");
 
-      std::str::from_utf8(&output).expect("Failed to interpret decompressed data as string")
+      String::from_utf8(output).expect("Failed to interpret decompressed data as string")
   };
 }
 
