@@ -1,10 +1,6 @@
 use std::{fs, io::Write};
 use libflate::gzip::Encoder;
 
-// this is the obscure 'formfeed' char, not found in the dictionary. 
-// It's like a newline.
-const DELIMITER: char = 0x0C as char;
-
 fn main() {
   // Tell Cargo that if the dictionary file changes, to rerun this build script.
   println!("cargo:rerun-if-changed=src/dictionary.json");

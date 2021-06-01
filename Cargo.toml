@@ -14,6 +14,7 @@ keywords = ["thesaurus", "synonym", "synonyms"]
 [dependencies]
 serde_json = "1.0.64"
 libflate = "1.1.0"
+lazy_static = "1.4.0"
 
 [build-dependencies]
 libflate = "1.1.0"

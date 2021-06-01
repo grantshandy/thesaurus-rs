@@ -33,6 +33,9 @@
 //! ```
 
 use serde_json::Value;
+use lazy_static::lazy_static;
+use libflate::gzip::Decoder;
+use std::io::Read;
 
 /// The main struct for the Thesaurus
 pub struct Thesaurus {
@@ -87,6 +90,17 @@ impl std::fmt::Display for WordType {
     }
 }
 
+static COMPRESSED_DICTIONARY: &[u8] = include_bytes!(concat!(env!("OUT_DIR"), "/en_thesaurus.gz"));
+
+lazy_static! {
+  static ref DICTIONARY: &'static str = {
+      let mut dec = Decoder::new(COMPRESSED_DICTIONARY).expect("Failed to initialize runtime dictionary decoder");
+      let mut output = Vec::new();
+      dec.read_to_end(&mut output).expect("Failed to decompress dictionary");
+
+      std::str::from_utf8(&output).expect("Failed to interpret decompressed data as string")
+  };
+}
 
 impl Thesaurus {
     /// Gets a synonym, you can set a word and wether or not you want to specify your parts of speech you want returned.
@@ -95,12 +109,10 @@ impl Thesaurus {
             Some(_) => true,
             None => false,
         };
-
-        let dict_jsonl: String = include_str!("en_thesaurus.jsonl").to_string();
     
         let mut words: Vec<Word> = Vec::new();
     
-        for json in dict_jsonl.lines() {
+        for json in DICTIONARY.lines() {
             let parsed_json: Value = match serde_json::from_str(&json) {
                 Ok(parsed_json) => parsed_json,
                 Err(error) => {
