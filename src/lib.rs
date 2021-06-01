@@ -33,17 +33,16 @@
 //! ```
 
 use serde_json::Value;
-use futures::future::Future;
 
 /// The main struct for the Thesaurus
 pub struct Thesaurus {
     pub name: String,
-    pub synonyms: Vec<Synonym>,
+    pub words: Vec<Word>,
 }
 
 /// Words output by the Thesaurus
 #[derive(Clone, PartialEq)]
-pub struct Synonym {
+pub struct Word {
     pub name: String,
     pub word_type: WordType,
 }
@@ -91,41 +90,17 @@ impl std::fmt::Display for WordType {
 
 impl Thesaurus {
     /// Gets a synonym, you can set a word and wether or not you want to specify your parts of speech you want returned.
-    pub fn synonym<T: AsRef<str>>(word: T, word_type_request: Option<WordType>) -> Result<Thesaurus, Error> {
-        let dict_jsonl: String = include_str!("en_thesaurus.jsonl").to_string();
-        let mut lines: Vec<String> = Vec::new();
-        
-        for line in dict_jsonl.lines() {
-            lines.push(line.to_string());
-        };
-
-        let synonyms = match Self::parse(lines, word.as_ref(), word_type_request) {
-            Ok(data) => data,
-            Err(error) => return Err(error), 
-        };
-
-        let thesaurus = Self {
-            name: word.as_ref().to_string(),
-            synonyms,
-        };
-
-        return Ok(thesaurus);
-    }
-
-    pub fn faster_synonym<T: AsRef<str>>(word: T, word_type_request: Option<WordType>) {
-        // -> Result<Thesaurus, Error>
-    }
-
-    // parse a vec of lines and return a vec of synonyms.
-    async fn parse<T: AsRef<str>>(dict_jsonl: Vec<String>, word: T, word_type_request: Option<WordType>) -> Future<Result<Vec<Synonym>, Error>> {
+    pub fn synonym<T: AsRef<str>>(word: T, word_type_request: Option<WordType>) -> std::result::Result<Thesaurus, Error> {
         let is_word_type_request: bool = match word_type_request {
             Some(_) => true,
             None => false,
         };
-   
-        let mut words: Vec<Synonym> = Vec::new();
+
+        let dict_jsonl: String = include_str!("en_thesaurus.jsonl").to_string();
     
-        for json in dict_jsonl {
+        let mut words: Vec<Word> = Vec::new();
+    
+        for json in dict_jsonl.lines() {
             let parsed_json: Value = match serde_json::from_str(&json) {
                 Ok(parsed_json) => parsed_json,
                 Err(error) => {
@@ -162,7 +137,7 @@ impl Thesaurus {
                         Err(error) => return Err(Error::UnexpectedType(error)),
                     };
     
-                    let word_struct = Synonym {
+                    let word_struct = Word {
                         name: synonym.clone(),
                         word_type: word_type,
                     };
@@ -188,7 +163,12 @@ impl Thesaurus {
             return Err(Error::Unknown);
         }
     
-        return Ok(words);
+        let word_res = Thesaurus {
+            name: word.as_ref().to_string(),
+            words,
+        };
+    
+        return Ok(word_res);
     }
 }
 

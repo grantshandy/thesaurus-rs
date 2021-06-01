@@ -1,11 +1,11 @@
 use thesaurus::{WordType, Thesaurus};
 
 fn main() {
-    match Thesaurus::synonym("good", None) {
+    match Thesaurus::synonym("good", Some(WordType::Noun)) {
         Ok(data) => {
             let mut synonyms = String::new();
 
-            for synonym in data.synonyms.iter() {
+            for synonym in data.words {
                 synonyms.push_str(&format!("\n    {} ({})", synonym.name, synonym.word_type));
             };
 

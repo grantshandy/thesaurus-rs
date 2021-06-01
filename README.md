@@ -10,7 +10,6 @@ Add to `Cargo.toml`
 thesaurus = "0.1.3"
 ```
 
-
 `thesaurus-rs` is extremely simple library for simple programs that need a thesaurus, but don't need an internet connection. It relies on the JSON file from [zaibacu](https://github.com/zaibacu/thesaurus).
 
 It's simple to use:
@@ -22,7 +21,7 @@ fn main() {
         Ok(data) => {
             let mut synonyms = String::new();
 
-            for synonym in data.words.iter() {
+            for synonym in data.words {
                 synonyms.push_str(&format!("\n    {} ({})", synonym.name, synonym.word_type));
             };
 
@@ -69,7 +68,6 @@ SOFTWARE.
 ```
 
 While the actual dictionary, from [WordNet](https://wordnet.princeton.edu/) uses this license:
-
 ```
 License and Commercial Use of WordNet
 
