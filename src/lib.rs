@@ -35,5 +35,5 @@ pub fn init() {
 }
 
 pub fn synonym<T: AsRef<str>>(word: T) -> Option<Vec<String>> {
-    DICTIONARY.get(word.as_ref()).map(|x| x.clone())
+    DICTIONARY.get(&word.as_ref().to_lowercase()).map(|x| x.clone())
 }

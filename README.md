@@ -7,7 +7,7 @@ A thesaurus library for Rust.
 
 Add to `Cargo.toml`
 ```
-thesaurus = "0.3.0"
+thesaurus = "0.3.1"
 ```
 
 `thesaurus-rs` is extremely simple library for simple programs that need a thesaurus, but don't have an internet connection. It relies on the thesaurus file from the [Moby Project](https://en.wikipedia.org/wiki/Moby_Project).
