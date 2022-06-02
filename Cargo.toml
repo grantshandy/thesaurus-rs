@@ -1,6 +1,6 @@
 [package]
 name = "thesaurus"
-version = "0.2.0"
+version = "0.3.0"
 authors = ["Grant Handy <grantshandy@gmail.com>"]
 edition = "2018"
 license = "MIT"
@@ -12,9 +12,11 @@ keywords = ["thesaurus", "synonym", "synonyms"]
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-serde_json = "1.0.64"
-libflate = "1.1.0"
-lazy_static = "1.4.0"
+libflate = "1.1"
+lazy_static = "1.4"
 
 [build-dependencies]
-libflate = "1.1.0"
+libflate = "1.1"
+
+[dev-dependencies]
+chrono = "0.4"
