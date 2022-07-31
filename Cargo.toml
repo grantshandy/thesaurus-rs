@@ -1,11 +1,11 @@
 [package]
 name = "thesaurus"
-version = "0.3.1"
+version = "0.4.0"
 authors = ["Grant Handy <grantshandy@gmail.com>"]
 edition = "2018"
 license = "MIT"
 description = "An offline thesaurus library for Rust."
-repository = "https://github.com/DefunctLizard/thesaurus-rs"
+repository = "https://github.com/grantshandy/thesaurus-rs"
 documentation = "https://docs.rs/thesaurus"
 keywords = ["thesaurus", "synonym", "synonyms"]
 
@@ -15,8 +15,27 @@ keywords = ["thesaurus", "synonym", "synonyms"]
 libflate = "1.1"
 lazy_static = "1.4"
 
+[features]
+default = ["wordnet"]
+wordnet = []
+moby = []
+
 [build-dependencies]
 libflate = "1.1"
+serde_json = "1.0"
 
-[dev-dependencies]
-chrono = "0.4"
+[package.metadata.docs.rs]
+all-features = true
+rustdoc-args = ["--cfg", "docsrs"]
+
+[[example]]
+name = "wordnet"
+required-features = ["wordnet"]
+
+[[example]]
+name = "moby"
+required-features = ["moby"]
+
+[[example]]
+name = "both"
+required-features = ["moby", "wordnet"]

@@ -3,20 +3,33 @@
 [![Crates.io](https://img.shields.io/crates/d/thesaurus)](https://crates.io/crates/thesaurus)
 [![API](https://docs.rs/thesaurus/badge.svg)](https://docs.rs/thesaurus)
 
-A thesaurus library for Rust.
+The offline thesaurus library for Rust that can use both [wordnet](https://wordnet.princeton.edu/) and [moby](https://en.wikipedia.org/wiki/Moby_Project) backends.
 
-Add to `Cargo.toml`
+Add to `Cargo.toml` for wordnet:
+```toml
+thesaurus = { version = "0.4.0", features = ["wordnet"] }
 ```
-thesaurus = "0.3.1"
+
+Add to `Cargo.toml` for moby (wordnet is on by default):
+```toml
+thesaurus = { version = "0.4.0", features = ["moby"], default_features = false }
 ```
 
-`thesaurus-rs` is extremely simple library for simple programs that need a thesaurus, but don't have an internet connection. It relies on the thesaurus file from the [Moby Project](https://en.wikipedia.org/wiki/Moby_Project).
+Both moby and wordnet have the same APIs, but they are included in different modules so you can use both in the same binary (in theory).
 
-It's fairly simple to use:
+## Backend Comparison
+Name | Simple Example Binary Size | Simple Example Binary Size (Stripped) | Available Words | Average Number of Synonyms | Compressed Dictionary Size | License
+---|---|---|---|---|---|---
+Moby | 15M | 11M | 30259 | 83.287 | 11M | US Public Domain
+Wordnet | 6.9M | 3.4M | 125701 | 3.394 | 2.9M | [Wordnet License](https://wordnet.princeton.edu/license-and-commercial-use)
+
+## Basic Wordnet Example
 ```rust
+use thesaurus::wordnet;
+
 fn main() {
     let word = "good";
-    let results = thesaurus::synonym(word).unwrap();
+    let results = wordnet::synonyms(word).unwrap();
 
     println!("Found {} results for {}:", results.len(), word);
 
@@ -27,52 +40,15 @@ fn main() {
 ```
 
 Result:
-```
-Found 665 results for good:
-  acceptable
-  accomplished
-  according to Hoyle
-  ace
-  actual
+```none
+Found 107 results for good:
+  skilled
+  skilful
+  practiced
+  skillful
+  expert
   adept
-  adequate
-  admirable
-  admissible
-  adroit
-  advantage
+  proficient
+  sainted
   ...
 ```
-
-## Licenses
-`thesaurus-rs` is written under the MIT license:
-```
-MIT License
-
-Copyright (c) 2021 Grant Handy
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-```
-
-The actual underlying thesaurus in the public domain.
-
-### Runtime Decompression
-This library compresses the text file at build time into a file with gzip compression that is then built into the binary. This makes your binary significantly smaller than if it was stored uncompressed.
-
-- Uncompressed: 24M
-- Compressed: 11M
