@@ -1,0 +1,16 @@
+[package]
+name = "thesaurus-moby"
+version = "0.1.0"
+edition = "2021"
+authors = ["Grant Handy <grantshandy@gmail.com>"]
+license = "MIT"
+repository = "https://github.com/grantshandy/thesaurus-rs"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+libflate = "1.1"
+lazy_static = "1.4"
+
+[build-dependencies]
+libflate = "1.1"

@@ -88,6 +88,22 @@ dependencies = [
 name = "thesaurus"
 version = "0.4.0"
 dependencies = [
+ "thesaurus-moby",
+ "thesaurus-wordnet",
+]
+
+[[package]]
+name = "thesaurus-moby"
+version = "0.1.0"
+dependencies = [
+ "lazy_static",
+ "libflate",
+]
+
+[[package]]
+name = "thesaurus-wordnet"
+version = "0.1.0"
+dependencies = [
  "lazy_static",
  "libflate",
  "serde_json",
