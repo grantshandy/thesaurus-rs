@@ -12,10 +12,10 @@ keywords = ["thesaurus", "synonym", "synonyms"]
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-# thesaurus-moby = { version = "0.1.0",  optional = true }
-# thesaurus-wordnet = { version = "0.1.0", optional = true }
-thesaurus-moby = { path = "./thesaurus-moby/",  optional = true }
-thesaurus-wordnet = { path = "./thesaurus-wordnet/", optional = true }
+thesaurus-moby = { version = "0.1.0",  optional = true }
+thesaurus-wordnet = { version = "0.1.0", optional = true }
+# thesaurus-moby = { path = "./thesaurus-moby/",  optional = true }
+# thesaurus-wordnet = { path = "./thesaurus-wordnet/", optional = true }
 
 [features]
 default = ["wordnet"]

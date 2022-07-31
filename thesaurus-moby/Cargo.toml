@@ -3,6 +3,7 @@ name = "thesaurus-moby"
 version = "0.1.0"
 edition = "2021"
 authors = ["Grant Handy <grantshandy@gmail.com>"]
+description = "subcrate for thesaurus-rs"
 license = "MIT"
 repository = "https://github.com/grantshandy/thesaurus-rs"
 
