@@ -24,7 +24,7 @@ pub fn dict() -> HashMap<String, Vec<String>> {
     dict
 }
 
-/// Retrieve synonyms for a word.
+/// Retrieve synonyms for a word. (ordered alphabetically)
 pub fn synonyms(word: impl AsRef<str>) -> Vec<String> {
     let mut synonyms = Vec::new();
 
@@ -35,6 +35,8 @@ pub fn synonyms(word: impl AsRef<str>) -> Vec<String> {
 
     #[cfg(feature = "wordnet")]
     synonyms.extend_from_slice(thesaurus_wordnet::synonyms(&word).as_slice());
+
+    synonyms.sort_by(|a, b| a.to_lowercase().cmp(&b.to_lowercase()));
 
     synonyms
 }

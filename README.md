@@ -65,14 +65,17 @@ fn main() {
 ```
 wordnet has 125701 words indexed, and 107 synonyms for "good"...
 synonyms...
-   skilled
-   skilful
-   practiced
-   skillful
-   expert
+   acceptable
    adept
-   proficient
-   sainted
+   advantageous
+   ample
+   angelic
+   angelical
+   bang-up
+   beatific
+   beneficial
+   beneficial
+   best
 ...
 ```
 
@@ -84,17 +87,20 @@ synonyms...
 ```
 moby has 30195 words indexed, and 666 synonyms for "good"...
 synonyms...
-   christian
-   christlike
-   christly
-   daedalian
-   god-fearing
-   ok
-   roger
-   sunday
    able to pay
    absolutely
    acceptable
+   accomplished
+   according to hoyle
+   ace
+   actual
+   adept
+   adequate
+   admirable
+   admissible
+   adroit
+   advantage
+   advantageous
 ...
 ```
 
@@ -106,15 +112,29 @@ synonyms...
 ```
 both wordnet and moby have 132592 words indexed, and 773 synonyms for "good"...
 synonyms...
-   christian
-   christlike
-   christly
-   daedalian
-   god-fearing
-   ok
-   roger
-   sunday
    able to pay
    absolutely
+   acceptable
+   acceptable
+   accomplished
+   according to hoyle
+   ace
+   actual
+   adept
+   adept
+   adequate
+   admirable
+   admissible
+   adroit
+   advantage
+   advantageous
+   advantageous
+   advisable
+   affable
+   affectionate
+   agreeable
+   all right
+   all-knowing
+   all-powerful
 ...
 ```

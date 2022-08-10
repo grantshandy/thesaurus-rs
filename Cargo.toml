@@ -1,6 +1,6 @@
 [package]
 name = "thesaurus"
-version = "0.5.0"
+version = "0.5.1"
 authors = ["Grant Handy <grantshandy@gmail.com>"]
 edition = "2021"
 license = "MIT"
