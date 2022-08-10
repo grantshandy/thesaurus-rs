@@ -8,7 +8,7 @@ fn main() {
     // Tell Cargo that if the dictionary files change, to rerun this build script.
     println!("cargo:rerun-if-changed={WORDNET}");
 
-    let thes = fs::read_to_string(WORDNET).expect(&format!("Failed to read \"{WORDNET}\""));
+    let thes = fs::read_to_string(WORDNET).expect(&format!("Failed to read \"{WORDNET}\"")).to_lowercase();
 
     let mut thes_structured: HashMap<String, Vec<String>> = HashMap::new();
 

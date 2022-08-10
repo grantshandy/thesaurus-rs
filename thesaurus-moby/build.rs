@@ -9,7 +9,8 @@ fn main() {
 
     let thes = fs::read_to_string(MOBY)
         .expect(&format!("Failed to read \"{MOBY}\""))
-        .replace(",", "|");
+        .replace(",", "|")
+        .to_lowercase();
 
     let compressed = {
         let mut encoder = Encoder::new(Vec::new()).expect("Failed to create compressor");

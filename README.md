@@ -7,48 +7,114 @@ The offline thesaurus library for Rust that can use both [wordnet](https://wordn
 
 Add to `Cargo.toml` for wordnet:
 ```toml
-thesaurus = { version = "0.4.0", features = ["wordnet"] }
+thesaurus = "0.5"
 ```
 
-Add to `Cargo.toml` for moby (wordnet is on by default):
+Add to `Cargo.toml` for moby *(wordnet is on by default)*:
 ```toml
-thesaurus = { version = "0.4.0", features = ["moby"], default_features = false }
+thesaurus = { version = "0.5", features = ["moby"], default_features = false }
 ```
-
-Both moby and wordnet have the same APIs, but they are included in different modules so you can use both in the same binary (in theory).
 
 ## Backend Comparison
 Name | Simple Example Binary Size | Simple Example Binary Size (Stripped) | Available Words | Average Number of Synonyms | Compressed Dictionary Size | License
 ---|---|---|---|---|---|---
-Moby | 15M | 11M | 30259 | 83.287 | 11M | US Public Domain
+Moby | 15M | 11M | 30159 | 83.287 | 11M | US Public Domain
 Wordnet | 6.9M | 3.4M | 125701 | 3.394 | 2.9M | [Wordnet License](https://wordnet.princeton.edu/license-and-commercial-use)
 
-## Basic Wordnet Example
+## Basic Example
 ```rust
-use thesaurus::wordnet;
+use std::{env, process};
 
 fn main() {
-    let word = "good";
-    let results = wordnet::synonyms(word).unwrap();
+    let args = env::args().collect::<Vec<String>>();
 
-    println!("Found {} results for {}:", results.len(), word);
+    let word: String = match args.get(1) {
+        Some(word) => word.to_string(),
+        None => {
+            eprintln!("Must include a word as an argument");
+            process::exit(1);
+        }
+    };
 
-    for word in results {
-        println!("  {word}");
+    let synonyms = thesaurus::synonyms(&word);
+    let num_words = thesaurus::dict().len();
+
+    cfg_if::cfg_if! {
+        if #[cfg(all(feature = "moby", feature = "wordnet"))] {
+            print!("both wordnet and moby have ");
+        } else if #[cfg(feature = "moby")] {
+            print!("moby has ");
+        } else if #[cfg(feature = "wordnet")] {
+            print!("wordnet has ");
+        }
+    }
+
+    println!("{num_words} words indexed, and {} synonyms for \"{word}\"...", synonyms.len());
+    println!("synonyms...");
+    for x in &synonyms {
+        println!("   {x}");
     }
 }
 ```
 
-Result:
-```none
-Found 107 results for good:
-  skilled
-  skilful
-  practiced
-  skillful
-  expert
-  adept
-  proficient
-  sainted
-  ...
+### Wordnet Output
+```shell
+ $ cargo r -rq --example simple -- good
+```
+
+```
+wordnet has 125701 words indexed, and 107 synonyms for "good"...
+synonyms...
+   skilled
+   skilful
+   practiced
+   skillful
+   expert
+   adept
+   proficient
+   sainted
+...
+```
+
+### Moby Output
+```shell
+ $ cargo r -rq --example simple --no-default-features --features=moby -- good
+```
+
+```
+moby has 30195 words indexed, and 666 synonyms for "good"...
+synonyms...
+   christian
+   christlike
+   christly
+   daedalian
+   god-fearing
+   ok
+   roger
+   sunday
+   able to pay
+   absolutely
+   acceptable
+...
+```
+
+## Both
+```shell
+ $ cargo r -rq --example simple --features=moby,wordnet -- good
+```
+
+```
+both wordnet and moby have 132592 words indexed, and 773 synonyms for "good"...
+synonyms...
+   christian
+   christlike
+   christly
+   daedalian
+   god-fearing
+   ok
+   roger
+   sunday
+   able to pay
+   absolutely
+...
 ```

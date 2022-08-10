@@ -33,7 +33,7 @@ lazy_static! {
     };
 }
 
-/// Initializes the dictionary in memory, this will make all subsequent calls faster (optional).
+/// Initializes the dictionary in memory, this will make the first subsequent call faster (optional).
 pub fn init() {
     initialize(&MOBY_DICT);
 }
@@ -44,8 +44,9 @@ pub fn dict() -> HashMap<String, Vec<String>> {
 }
 
 /// Retrieve synonyms for a word.
-pub fn synonyms(word: impl AsRef<str>) -> Option<Vec<String>> {
+pub fn synonyms(word: impl AsRef<str>) -> Vec<String> {
     MOBY_DICT
         .get(&word.as_ref().to_lowercase())
         .map(|x| x.clone())
+        .unwrap_or_default()
 }
