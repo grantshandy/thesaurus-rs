@@ -1,42 +1,75 @@
 #![doc = include_str!("../README.md")]
+#![cfg_attr(docsrs, feature(doc_cfg, doc_auto_cfg))]
 
 use std::collections::HashMap;
 
-/// Initializes the dictionary in memory, this will make the first subsequent call faster (optional).
-pub fn init() {
-    #[cfg(feature = "moby")]
-    thesaurus_moby::init();
+#[cfg(feature = "static")]
+use lazy_static::{lazy_static, initialize};
 
-    #[cfg(feature = "wordnet")]
-    thesaurus_wordnet::init();
+#[cfg(feature = "static")]
+lazy_static! {
+    static ref DICT: HashMap<String, Vec<String>> = parse_dict();
 }
 
-/// Returns the dictionary from memory.
+/// Initialize a global dictionary so initialization isn't done on the first call to [`synonyms`] or [`dict`].
+#[cfg(feature = "static")]
+pub fn init() {
+    initialize(&DICT);
+}
+
+/// Return the internal dictionary.
 pub fn dict() -> HashMap<String, Vec<String>> {
-    let mut dict = HashMap::new();
+    let mut dict: HashMap<String, Vec<String>> = HashMap::new();
 
-    #[cfg(feature = "moby")]
-    dict.extend(thesaurus_moby::dict());
+    #[cfg(feature = "static")]
+    dict.extend(DICT.to_owned());
 
-    #[cfg(feature = "wordnet")]
-    dict.extend(thesaurus_wordnet::dict());
+    // if we're not static...
+    if dict.is_empty() {
+        dict.extend(parse_dict());
+    }
 
     dict
 }
 
-/// Retrieve synonyms for a word. (ordered alphabetically)
+/// Return synonyms for a word.
 pub fn synonyms(word: impl AsRef<str>) -> Vec<String> {
-    let mut synonyms = Vec::new();
+    let mut s = dict()
+        .get(word.as_ref())
+        .map(|x| x.clone())
+        .unwrap_or_default();
 
-    let word = word.as_ref().to_lowercase();
+    s.dedup();
+    s.sort_by(|a, b| a.cmp(&b));
 
-    #[cfg(feature = "moby")]
-    synonyms.extend_from_slice(thesaurus_moby::synonyms(&word).as_slice());
+    s
+}
+
+fn parse_dict() -> HashMap<String, Vec<String>> {
+    let mut dict: HashMap<String, Vec<String>> = HashMap::new();
 
     #[cfg(feature = "wordnet")]
-    synonyms.extend_from_slice(thesaurus_wordnet::synonyms(&word).as_slice());
+    for line in thesaurus_wordnet::uncompress().lines() {
+        parse_dict_line(line, &mut dict);
+    }
 
-    synonyms.sort_by(|a, b| a.to_lowercase().cmp(&b.to_lowercase()));
+    #[cfg(feature = "moby")]
+    for line in thesaurus_moby::uncompress().lines() {
+        parse_dict_line(line, &mut dict);
+    }
 
-    synonyms
+    dict
+}
+
+fn parse_dict_line(line: &str, dict: &mut HashMap<String, Vec<String>>) {
+    let mut line: Vec<String> = line.split('|').map(|x| x.to_string().to_lowercase()).collect();
+
+    let name = line.remove(0);
+
+    if let Some(x) = dict.get_mut(&name) {
+        x.extend_from_slice(&line);
+        x.dedup();
+    } else {
+        dict.insert(name, line);
+    }
 }

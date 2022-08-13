@@ -1,6 +1,6 @@
 [package]
 name = "thesaurus"
-version = "0.5.1"
+version = "0.5.2"
 authors = ["Grant Handy <grantshandy@gmail.com>"]
 edition = "2021"
 license = "MIT"
@@ -11,14 +11,20 @@ keywords = ["thesaurus", "synonym", "synonyms"]
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
+[package.metadata.docs.rs]
+all-features = true
+rustdoc-args = ["--cfg", "docsrs"]
+
 [dependencies]
-thesaurus-moby = { version = "0.1",  optional = true }
-thesaurus-wordnet = { version = "0.1", optional = true }
+lazy_static = { version = "1.4", optional = true }
+thesaurus-moby = { version = "0.2",  optional = true }
+thesaurus-wordnet = { version = "0.2", optional = true }
 
 [dev-dependencies]
 cfg-if = "1"
 
 [features]
-default = ["wordnet"]
+default = ["wordnet", "static"]
 wordnet = ["thesaurus-wordnet"]
 moby = ["thesaurus-moby"]
+static = ["lazy_static"]
